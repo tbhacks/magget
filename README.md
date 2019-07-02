@@ -1,9 +1,11 @@
 # pimags
-Quick and dirty scripts for downloading issues of MagPi and Wireframe magazine.
+Quick and dirty scripts for downloading Raspberry Pi magazines.
 
-Use ./mpget.sh to download MagPi issues, or ./wfget.sh to download Wireframe issues.
-Both take an optional argument to a destination directory which will be created if it does not exist.
-Otherwise they download to the working directory.
+Use mpget.sh to download issues of MagPi, wfget.sh for issues of
+Wireframe, and hsget.sh for issues of HackSpace. All take an optional
+argument to a destination directory which will be created if it does not
+exist. Otherwise they download to the working directory.
 
-There may be bugs, the code may not be elegant or efficient, they may stop working if Raspberry Pi changes anything.
-Use at your own risk.
+The code is not very elegant, efficient, or robust. It may stop working
+if Raspberry Pi changes how these magazines are stored or accessed. It
+currently works, but use at your own risk, and always respectfully.
