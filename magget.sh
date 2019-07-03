@@ -12,7 +12,8 @@ function usage {
 
 while getopts ":td:" o; do
 	case "$o" in
-		t)  DRYRUN=1;;
+		t)
+			DRYRUN=1;;
 		d)
 			DIR="$OPTARG";;
 		*)
