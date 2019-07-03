@@ -1,22 +1,39 @@
 #!/bin/bash
 
-# Default to downloading MagPi
-if [ -z "$1" ]; then
-	MAG=magpi
-else
-	MAG=$1
+function usage {
+	echo "USAGE: magget.sh [-t] [-d DIR] {magpi|wireframe|hackspace}"
+	echo
+	echo "-d DIR: DIR will be created if it does not exist and PDFs"
+	echo "will be downloaded there."
+	echo "-t: Dry run, do not create DIR or download PDFs."
+	echo
+	exit
+}
+
+while getopts ":td:" o; do
+	case "$o" in
+		t)  DRYRUN=1;;
+		d)
+			DIR="$OPTARG";;
+		*)
+			usage
+	esac
+done
+shift $((OPTIND-1))
+
+# Default to working directory
+if [ -z "$DIR" ]; then
+	DIR=.
 fi
 
-# Optional destination directory
-if [ -z "$2" ]; then
-	DIR=.
-else
-	DIR=$2
-fi
+MAG=${1,,}
+[[ $MAG == magpi || $MAG == wireframe || $MAG == hackspace ]] || usage
 
 # Create directory if it doesn't exist
 if [ ! -d "$DIR" ]; then
-	mkdir $DIR
+	if [ -z "$DRYRUN" ]; then
+		mkdir $DIR
+	fi
 fi
 
 # Setup variables depending on magazine
@@ -37,7 +54,7 @@ case "$MAG" in
 esac
 
 # Get file listing
-echo "Fetching from $URL"
+echo "Fetching $MAG from $URL"
 
 # Get PDF URLS
 HTML=$(curl $URL 2> /dev/null)
@@ -52,10 +69,12 @@ sed -e 's/https:\/\/raspberrypi\.org/https:\/\/www\.raspberrypi\.org/'\
 for rfname in $URLS; do
 	# Get filename from URL
 	fname=$(echo "$rfname" | sed -n 's/.*\/\([^\/]*\.pdf\).*/\1/p')
-	
+
 	# Simple check if file already exists, doesn't check contents.
 	if [ ! -e $DIR/$fname ]; then
 		echo "Retrieving $rfname"
-		curl -o $DIR/$fname $rfname
+		if [ -z "$DRYRUN" ]; then
+			curl -o $DIR/$fname $rfname
+		fi
 	fi
 done
