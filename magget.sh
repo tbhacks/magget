@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function usage {
-	echo "USAGE: magget.sh [-t] [-d DIR] {magpi|wireframe|hackspace}"
+	echo "USAGE: magget.sh [-t] [-d DIR] {magpi|wireframe|hackspace|hello}"
 	echo
 	echo "-d DIR: DIR will be created if it does not exist and PDFs"
 	echo "will be downloaded there."
@@ -28,7 +28,7 @@ if [ -z "$DIR" ]; then
 fi
 
 MAG=${1,,}
-[[ $MAG == magpi || $MAG == wireframe || $MAG == hackspace ]] || usage
+[[ $MAG == magpi || $MAG == wireframe || $MAG == hackspace || $MAG == hello ]] || usage
 
 # Create directory if it doesn't exist
 if [ ! -d "$DIR" ]; then
@@ -49,6 +49,10 @@ case "$MAG" in
 		;;
 	hackspace)
 		URL="https://hackspace.raspberrypi.org/issues"
+		PAT="full_pdfs"
+		;;
+	hello)
+		URL="https://helloworld.raspberrypi.org/issues"
 		PAT="full_pdfs"
 		;;
 	*)
